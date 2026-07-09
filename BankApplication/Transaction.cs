@@ -4,11 +4,10 @@ namespace BankApplication
 {
     internal class Transaction
     {
-        public string Type { get; set; }           // "Deposit" or "Withdraw"
-        public decimal Amount { get; set; }        // Amount transacted
-        public DateTime Date { get; set; }         // When it happened
-        public decimal BalanceAfter { get; set; }  // Balance after transaction
-
+        public string Type { get; set; }           
+        public decimal Amount { get; set; }        
+        public DateTime Date { get; set; }         
+        public decimal BalanceAfter { get; set; }  
         public Transaction(string type, decimal amount, decimal balanceAfter)
         {
             Type = type;
