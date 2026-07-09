@@ -15,17 +15,14 @@ namespace BankApplication
         {
             string accountNumber = "BBI" + nextId++.ToString();
             Account acc;
-            if (type == "Savings")
+            if (type.ToLower() == "savings")
             {
-
                 acc = new SavingsAccount(accountNumber, ownerName, initialBalance, interestRate);
             }
             else
             {
-                Console.WriteLine("Invalid account type. Defaulting to Normal Account.");
-
+                acc = new Account(accountNumber, ownerName, initialBalance);
             }
-            acc = new Account(accountNumber, ownerName, initialBalance);
             accounts.Add(acc);
             return acc;
         }

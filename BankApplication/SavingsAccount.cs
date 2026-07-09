@@ -19,7 +19,7 @@ namespace BankApplication
             
         }
 
-        public void FixedDeposit(decimal amount,int tenure)
+        public void FixedDeposit(decimal amount, int tenure)
         {
             decimal principal = amount;
             decimal rate = (decimal)InterestRate / 100;
@@ -30,11 +30,13 @@ namespace BankApplication
                 throw new ArgumentException("Principal, rate, and time must be positive values.");
             }
 
-            decimal compounded = principal * rate * tenure;
-            decimal TotalAmount = principal + compounded;
+            // Compound Interest Formula: A = P(1 + r)^t
+            decimal finalAmount = principal * (decimal)Math.Pow((double)(1 + rate), time);
+            decimal compoundedInterest = finalAmount - principal;
 
-            Console.WriteLine($"Fixed Deposit (simple interest) of {TotalAmount} for {tenure} years at {InterestRate}% interest rate will yield: {compounded}");
-
+            Console.WriteLine($"Fixed Deposit (compound interest) of ${principal} for {tenure} years at {InterestRate}% interest rate:");
+            Console.WriteLine($"  Interest Earned: ${compoundedInterest:F2}");
+            Console.WriteLine($"  Total Amount: ${finalAmount:F2}");
         }
 
         public override void Withdraw(decimal amount)

@@ -26,7 +26,7 @@ namespace BankApplication
                 //Console.WriteLine("Deposit amount must be positive.");
             }
             Balance = Balance + amount;
-            Console.WriteLine($"Deposited {amount} ti {AccountNumber}, Account Balance : {Balance}");
+            Console.WriteLine($"Deposited {amount} to {AccountNumber}, Account Balance : {Balance}");
         }
 
         public virtual void Withdraw(decimal amount)
