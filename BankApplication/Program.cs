@@ -23,7 +23,8 @@ namespace BankApplication
                 Console.WriteLine("3. Deposit");
                 Console.WriteLine("4. Withdraw");
                 Console.WriteLine("5. FixedDeposit");
-                Console.WriteLine("6. Exit");
+                Console.WriteLine("6. View Transaction History");
+                Console.WriteLine("7. Exit");
                 Console.Write("Please select an option: ");
                 string input = Console.ReadLine();
                 switch (input)
@@ -111,6 +112,21 @@ namespace BankApplication
 
 
                     case "6":
+                        Console.WriteLine("Enter Account Number: ");
+                        string historyacc = Console.ReadLine();
+                        Account historyAccount = bank.accounts.Find(a => a.AccountNumber == historyacc);
+                        if (historyAccount != null)
+                        {
+                            historyAccount.DisplayTransactionHistory();
+                        }
+                        else
+                        {
+                            Console.WriteLine("Account not found.");
+                        }
+                        break;
+
+
+                    case "7":
                         running = false;
                         break;
                     default:
