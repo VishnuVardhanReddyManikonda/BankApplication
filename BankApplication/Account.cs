@@ -19,9 +19,9 @@ namespace BankApplication
             Balance = initialBalance;
         }
 
-        public virtual void Deposit (decimal amount)
+        public virtual void Deposit(decimal amount)
         {
-            if (amount <=0)
+            if (amount <= 0)
             {
                 throw new ArgumentException("Deposit amount must be positive.");
             }
@@ -32,7 +32,7 @@ namespace BankApplication
 
         public virtual void Withdraw(decimal amount)
         {
-            if (amount <=0)
+            if (amount <= 0)
             {
                 throw new ArgumentException("U cannot withdraw negative or zero amount.");
             }
@@ -70,3 +70,5 @@ namespace BankApplication
             }
             Console.WriteLine("======================================================\n");
         }
+    }
+}

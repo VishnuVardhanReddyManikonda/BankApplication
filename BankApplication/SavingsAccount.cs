@@ -30,7 +30,6 @@ namespace BankApplication
                 throw new ArgumentException("Principal, rate, and time must be positive values.");
             }
 
-            // Compound Interest Formula: A = P(1 + r)^t
             decimal finalAmount = principal * (decimal)Math.Pow((double)(1 + rate), time);
             decimal compoundedInterest = finalAmount - principal;
 
