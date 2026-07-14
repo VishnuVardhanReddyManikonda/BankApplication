@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 
-using System;
-
 namespace BankApplication
 {
     enum MenuOption
@@ -17,17 +15,69 @@ namespace BankApplication
         Exit
     }
 
-
-
-
     internal class Program
     {
-
-
         static void Pause()
         {
-            Console.WriteLine("\nPress any key to continue..."); 
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("\nPress any key to continue...");
+            Console.ResetColor();
             Console.ReadKey();
+        }
+
+        static void PrintSuccess(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine(message);
+            Console.ResetColor();
+        }
+
+        static void PrintError(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(message);
+            Console.ResetColor();
+        }
+
+        static void PrintWarning(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine(message);
+            Console.ResetColor();
+        }
+
+        static void PrintHeader(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine(message);
+            Console.ResetColor();
+        }
+        static MenuOption ShowMenu()
+        {
+            Console.Clear();
+            PrintHeader("\n====== Bank Application ======");
+            Console.WriteLine("1. Create Account");
+            Console.WriteLine("2. Display All Accounts");
+            Console.WriteLine("3. Deposit");
+            Console.WriteLine("4. Withdraw");
+            Console.WriteLine("5. Fixed Deposit");
+            Console.WriteLine("6. View Transaction History");
+            Console.WriteLine("7. Exit");
+
+            Console.Write("\nPlease select an option: ");
+
+            string? choice = Console.ReadLine();
+
+            int input;
+
+            if (!int.TryParse(choice, out input) || input < 1 || input > 7)
+            {
+                PrintError("Invalid option. Please try again.");
+                Pause();
+                return ShowMenu();
+            }
+
+            return (MenuOption)input;
         }
         public static void Main(string[] args)
         {
@@ -38,43 +88,17 @@ namespace BankApplication
 
             while (running)
             {
-
-                Console.Clear();
-                Console.WriteLine("\n====== Bank Application ======");
-                Console.WriteLine("1. Create Account");
-                Console.WriteLine("2. Display All Accounts");
-                Console.WriteLine("3. Deposit");
-                Console.WriteLine("4. Withdraw");
-                Console.WriteLine("5. Fixed Deposit");
-                Console.WriteLine("6. View Transaction History");
-                Console.WriteLine("7. Exit");
-
-
-                Console.Write("Please select an option: ");
-
-                string? choice = Console.ReadLine();
-
-                int input;
-
-                if (!int.TryParse(choice, out input) || input < 1 || input > 7)
-                {
-                    Console.WriteLine("Invalid option. Please try again.");
-                    continue;
-                }
-                MenuOption option = (MenuOption)input;
+                MenuOption option = ShowMenu();
                 switch (option)
-
                 {
-
                     case MenuOption.CreateAccount:
                         try
                         {
-
                             Console.Write("Enter owner name: ");
                             string ownerName = Console.ReadLine() ?? "";
                             if (!ownerName.All(char.IsLetter))
                             {
-                                throw new ArgumentException("Account Owner name must contain only letters no spaces.");
+                                throw new ArgumentException("Account Owner name must contain only letters no spaces. Since Owner name will be a part of Account Number.");
                             }
 
                             Console.Write("Enter initial balance: ");
@@ -86,40 +110,37 @@ namespace BankApplication
 
                             Console.Write("Enter account type (Savings/Normal): ");
 
-                            string type = (Console.ReadLine()??"").Trim().ToLower();
-
+                            string type = (Console.ReadLine() ?? "").Trim().ToLower();
 
                             decimal interestRate = 0m;
 
                             if (type == "savings")
                             {
                                 Console.Write("Enter interest rate: ");
-                                interestRate = decimal.Parse(Console.ReadLine()??"0");
-                                Console.WriteLine($"Interest rate set to {interestRate}% for Savings Account.");
-
+                                interestRate = decimal.Parse(Console.ReadLine() ?? "0");
+                                PrintSuccess($"Interest rate set to {interestRate}% for Savings Account.");
                             }
                             else if (type == "normal")
                             {
                                 interestRate = 0m;
-                                Console.WriteLine("Normal/Current has been created");
+                                PrintSuccess("Normal/Current Account has been created");
                             }
                             else
                             {
                                 throw new ArgumentException("Invalid account type. Please enter 'Savings' or 'Normal'.");
                             }
 
-
-                            bank.CreateAccount(ownerName, initialBalance, type, interestRate);
+                            Account account = bank.CreateAccount(ownerName, initialBalance, type, interestRate);
+                            PrintSuccess($"Account Details : \n Account Number : {account.AccountNumber}\n Owner Name :{account.OwnerName}\n Balnce : {account.Balance}$ ");
                             break;
-
                         }
                         catch (Exception ex)
                         {
-                            Console.WriteLine($"Error: {ex.Message} , Please Enter a Valid Amount");
+                            PrintError($"Error: {ex.Message}");
                             break;
                         }
-                    case MenuOption.DisplayAllAccounts:
 
+                    case MenuOption.DisplayAllAccounts:
                         bank.DisplayAllAccounts();
                         break;
 
@@ -137,20 +158,21 @@ namespace BankApplication
                                 decimal depositAmount = decimal.Parse(Console.ReadLine() ?? "0");
 
                                 depositAccount.Deposit(depositAmount);
+                                PrintSuccess("Deposit successful!");
                             }
                             else
                             {
-                                Console.WriteLine("Account not found.");
+                                PrintError("Account not found.");
                             }
 
                             break;
                         }
                         catch (Exception ex)
                         {
-
-                            Console.WriteLine($"Error: {ex.Message}, Please enter Valid amount.");
+                            PrintError($"Error: {ex.Message}, Please enter Valid amount.");
                             break;
                         }
+
                     case MenuOption.Withdraw:
                         try
                         {
@@ -162,27 +184,27 @@ namespace BankApplication
                             if (withdrawAccount != null)
                             {
                                 Console.Write("Enter Amount to Withdraw: ");
-                                decimal withdrawAmount = decimal.Parse(Console.ReadLine()??"0");
+                                decimal withdrawAmount = decimal.Parse(Console.ReadLine() ?? "0");
 
                                 withdrawAccount.Withdraw(withdrawAmount);
+                                PrintSuccess("Withdrawal successful!");
                             }
                             else
                             {
-                                Console.WriteLine("Account not found.");
+                                PrintError(" Account not found.");
                             }
 
                             break;
                         }
                         catch (Exception ex)
                         {
-                            Console.WriteLine($"Error: {ex.Message}, Please enter Valid amount.");
+                            PrintError($"Error: {ex.Message}, Please enter Valid amount.");
                             break;
                         }
-                    case MenuOption.FixedDeposit:
 
+                    case MenuOption.FixedDeposit:
                         try
                         {
-
                             Console.Write("Enter Account Number: ");
                             string? fdAcc = Console.ReadLine();
 
@@ -193,33 +215,33 @@ namespace BankApplication
                                 if (fdAccount is SavingsAccount savingsAccount)
                                 {
                                     Console.Write("Enter Fixed Deposit Amount: ");
-                                    decimal fdAmount = decimal.Parse(Console.ReadLine()??"0");
+                                    decimal fdAmount = decimal.Parse(Console.ReadLine() ?? "0");
 
                                     Console.Write("Enter Tenure (Years): ");
-                                    int tenure = int.Parse(Console.ReadLine()??"0");
+                                    int tenure = int.Parse(Console.ReadLine() ?? "0");
 
                                     savingsAccount.FixedDeposit(fdAmount, tenure);
+                                    PrintSuccess("Fixed Deposit processed!");
                                 }
                                 else
                                 {
-                                    Console.WriteLine("Fixed Deposit is available only for Savings Accounts.");
+                                    PrintWarning("Fixed Deposit is available only for Savings Accounts.");
                                 }
                             }
                             else
                             {
-                                Console.WriteLine("Account not found.");
+                                PrintError("Account not found.");
                             }
 
                             break;
                         }
                         catch (Exception ex)
                         {
-                            Console.WriteLine($"Error: {ex.Message} , Please enter Valid Details.");
+                            PrintError($"Error: {ex.Message} , Please enter Valid Details.");
                             break;
                         }
 
                     case MenuOption.ViewTransactionHistory:
-
                         Console.Write("Enter Account Number: ");
                         string? historyAcc = Console.ReadLine();
 
@@ -231,19 +253,17 @@ namespace BankApplication
                         }
                         else
                         {
-                            Console.WriteLine("Account not found.");
+                            PrintError("Account not found.");
                         }
 
                         break;
 
                     case MenuOption.Exit:
-
-                        Console.WriteLine("Thank you for using Bank Application!");
+                        PrintSuccess("Thank you for using Bank Application!");
                         running = false;
                         break;
-                        
                 }
-            if (running)
+                if (running)
                 {
                     Pause();
                 }
