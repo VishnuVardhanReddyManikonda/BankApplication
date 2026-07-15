@@ -33,6 +33,15 @@ namespace BankApplication
                 Console.WriteLine(message);
                 Console.ResetColor();
             }
-        }
+
+            public void Pause()
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("\nPress any key to continue...");
+                Console.ResetColor();
+                Console.ReadKey();
+            }
+    }
+
     }
 

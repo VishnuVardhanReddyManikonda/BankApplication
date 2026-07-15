@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BankApplication
 {
-    internal class Account
+    public class Account
     {
         public string AccountNumber { get; set; }
         public string OwnerName { get; set; }

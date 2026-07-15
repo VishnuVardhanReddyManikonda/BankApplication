@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BankApplication
 {
-    internal class SavingsAccount: Account
+    public class SavingsAccount: Account
     {
         public decimal InterestRate { get; set; }
 
@@ -13,11 +13,10 @@ namespace BankApplication
             InterestRate = interestRate;
         }
 
-        public override void Deposit(decimal amount)
-        {
-            base.Deposit(amount);
-            
-        }
+        //public override void Deposit(decimal amount)
+        //{
+        //    base.Deposit(amount);            
+        //}
 
         public void FixedDeposit(decimal amount, int tenure)
         {

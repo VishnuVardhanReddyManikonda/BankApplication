@@ -2,7 +2,7 @@ using System;
 
 namespace BankApplication
 {
-    internal class Transaction
+    public class Transaction
     {
         public string Type { get; set; }           
         public decimal Amount { get; set; }        

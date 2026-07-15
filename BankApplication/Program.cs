@@ -10,73 +10,19 @@ namespace BankApplication
     {
 
         TerminalPrint terminalPrint = new TerminalPrint();
-        public void Pause()
-        {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("\nPress any key to continue...");
-            Console.ResetColor();
-            Console.ReadKey();
-        }
-
-        public MainMenu ShowMainMenu()
-        {
-            Console.Clear();
-            terminalPrint.PrintHeader("Welcome to the Bank Application");
-            Console.WriteLine("1. Menu");
-            Console.WriteLine("2. Exit");
-            Console.Write("\nSelect an option: ");
-            var input = Console.ReadLine();
-            int option;
-
-            if (!int.TryParse(input, out option) || option < 1 || option > 2)
-            {
-                terminalPrint.PrintError("Invalid option. Please try again.");
-                Pause();
-                return ShowMainMenu();
-            }
-
-            return (MainMenu)option;
-        }
-
-        public MenuOption ShowMenu()
-        {
-            Console.Clear();
-            terminalPrint.PrintHeader("\n====== Bank Application ======");
-            Console.WriteLine("1. Create Account");
-            Console.WriteLine("2. Display All Accounts");
-            Console.WriteLine("3. Deposit");
-            Console.WriteLine("4. Withdraw");
-            Console.WriteLine("5. Fixed Deposit");
-            Console.WriteLine("6. View Transaction History");
-            Console.WriteLine("7. Exit to Main Menu");
-
-            Console.Write("\nPlease select an option: ");
-
-            string? choice = Console.ReadLine();
-
-            int input;
-
-            if (!int.TryParse(choice, out input) || input < 1 || input > 7)
-            {
-                terminalPrint.PrintError("Invalid option. Please try again.");
-                Pause();
-                return ShowMenu();
-            }
-
-            return (MenuOption)input;
-        }
 
         public static void Main(string[] args)
         {
             Program program = new Program();
             Bank bank = new Bank();
+            MenuUi menuUi = new MenuUi();
             bool running = true;
 
             bank.CreateAccount("Vishnu", 1000m, "Savings", 5m);
 
             while (running)
             {
-                MainMenu mainMenu = program.ShowMainMenu();
+                MainMenu mainMenu = menuUi.ShowMainMenu();
 
                 switch (mainMenu)
                 {
@@ -85,7 +31,7 @@ namespace BankApplication
 
                         while (inMain)
                         {
-                            MenuOption option = program.ShowMenu();
+                            MenuOption option = menuUi.ShowMenu();
                             switch (option)
                             {
                                 case MenuOption.CreateAccount:
@@ -130,19 +76,19 @@ namespace BankApplication
                                         Account account = bank.CreateAccount(ownerName, initialBalance, type, interestRate);
 
                                         program.terminalPrint.PrintSuccess($"Account Details : \n Account Number : {account.AccountNumber}\n Owner Name :{account.OwnerName}\n Balance : {account.Balance}$ ");
-                                        program.Pause();
+                                        program.terminalPrint.Pause();
                                         break;
                                     }
                                     catch (Exception ex)
                                     {
                                         program.terminalPrint.PrintError($"Error: {ex.Message}");
-                                        program.Pause();
+                                        program.terminalPrint.Pause();
                                         break;
                                     }
 
                                 case MenuOption.DisplayAllAccounts:
                                     bank.DisplayAllAccounts();
-                                    program.Pause();
+                                    program.terminalPrint.Pause();
                                     break;
 
                                 case MenuOption.Deposit:
@@ -166,13 +112,13 @@ namespace BankApplication
                                             program.terminalPrint.PrintError("Account not found.");
                                         }
 
-                                        program.Pause();
+                                        program.terminalPrint.Pause();
                                         break;
                                     }
                                     catch (Exception ex)
                                     {
                                         program.terminalPrint.PrintError($"Error: {ex.Message}, Please enter Valid amount.");
-                                        program.Pause();
+                                        program.terminalPrint.Pause();
                                         break;
                                     }
 
@@ -182,7 +128,7 @@ namespace BankApplication
                                         Console.Write("Enter Account Number: ");
                                         string? withdrawAcc = Console.ReadLine();
 
-                                        Account? withdrawAccount = bank.accounts.Find(a => a.AccountNumber == withdrawAcc);
+                                        Account? withdrawAccount = bank.accounts.FirstOrDefault(a => a.AccountNumber == withdrawAcc);
 
                                         if (withdrawAccount != null)
                                         {
@@ -197,13 +143,13 @@ namespace BankApplication
                                             program.terminalPrint.PrintError(" Account not found.");
                                         }
 
-                                        program.Pause();
+                                        program.terminalPrint.Pause();
                                         break;
                                     }
                                     catch (Exception ex)
                                     {
                                         program.terminalPrint.PrintError($"Error: {ex.Message}, Please enter Valid amount.");
-                                        program.Pause();
+                                        program.terminalPrint.Pause();
                                         break;
                                     }
 
@@ -238,13 +184,13 @@ namespace BankApplication
                                             program.terminalPrint.PrintError("Account not found.");
                                         }
 
-                                        program.Pause();
+                                        program.terminalPrint.Pause();
                                         break;
                                     }
                                     catch (Exception ex)
                                     {
                                         program.terminalPrint.PrintError($"Error: {ex.Message} , Please enter Valid Details.");
-                                        program.Pause();
+                                        program.terminalPrint.Pause();
                                         break;
                                     }
 
@@ -265,12 +211,12 @@ namespace BankApplication
                                             program.terminalPrint.PrintError("Account not found.");
                                         }
 
-                                        program.Pause();
+                                        program.terminalPrint.Pause();
                                     }
                                     catch (Exception ex)
                                     {
                                         program.terminalPrint.PrintError($"Error: {ex.Message}");
-                                        program.Pause();
+                                        program.terminalPrint.Pause();
                                     }
                                     break;
 
