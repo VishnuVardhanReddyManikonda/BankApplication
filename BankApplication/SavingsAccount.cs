@@ -13,10 +13,19 @@ namespace BankApplication
             InterestRate = interestRate;
         }
 
-        //public override void Deposit(decimal amount)
-        //{
-        //    base.Deposit(amount);            
-        //}
+        public override void Deposit(decimal amount)
+        {
+            if (amount <= 0)
+            {
+                throw new ArgumentException("Deposit amount must be positive.");
+            }
+            var charges = 0.1m;
+            Balance = Balance + amount-charges;
+            TransactionHistory.Add(new Transaction("Deposit", amount, Balance));
+            Console.WriteLine("0.1$ has been charged for Savings Account");
+            Console.WriteLine($"Deposited {amount} to {AccountNumber}, Account Balance : {Balance}");
+        }
+
 
         public void FixedDeposit(decimal amount, int tenure)
         {
@@ -39,7 +48,21 @@ namespace BankApplication
 
         public override void Withdraw(decimal amount)
         {
-            base.Withdraw(amount);
+
+            if (amount <= 0)
+            {
+                throw new ArgumentException("U cannot withdraw negative or zero amount.");
+            }
+            else if (amount > Balance)
+            {
+                throw new InvalidOperationException("Insufficient funds for withdrawal.");
+            }
+            var charges = 0.1m;
+            Balance = Balance - amount - charges;
+            TransactionHistory.Add(new Transaction("Withdraw", amount, Balance));
+            Console.WriteLine("0.1$ has been charged for Savings Account");
+            Console.WriteLine($"Withdrawn {amount} from {AccountNumber}, Account Balance : {Balance}");
+
         }
         public override void DisplayAccountInfo()
         {

@@ -8,14 +8,19 @@ namespace BankApplication
 
     public class Program
     {
+        public TerminalPrint terminalPrint;
+        public Program(TerminalPrint terminalPrint)
+        { 
+            this.terminalPrint  = terminalPrint;
+        }
 
-        TerminalPrint terminalPrint = new TerminalPrint();
 
         public static void Main(string[] args)
         {
-            Program program = new Program();
+            TerminalPrint terminalPrint = new TerminalPrint();
+            Program program = new Program(terminalPrint);
             Bank bank = new Bank();
-            MenuUi menuUi = new MenuUi();
+            MenuUi menuUi = new MenuUi(terminalPrint);
             bool running = true;
 
             bank.CreateAccount("Vishnu", 1000m, "Savings", 5m);
@@ -39,9 +44,11 @@ namespace BankApplication
                                     {
                                         Console.Write("Enter owner name: ");
                                         string ownerName = Console.ReadLine() ?? "";
-                                        if (!ownerName.All(char.IsLetter))
+                                        if (string.IsNullOrWhiteSpace(ownerName) ||
+                                            !ownerName.All(c => char.IsLetter(c) || char.IsWhiteSpace(c)))
                                         {
-                                            throw new ArgumentException("Account Owner name must contain only letters no spaces. Since Owner name will be a part of Account Number.");
+                                            throw new ArgumentException(
+                                                "Account Owner name must contain only letters and spaces.");
                                         }
 
                                         Console.Write("Enter initial balance: ");

@@ -6,7 +6,12 @@ namespace BankApplication
 {
     public class MenuUi
     {
-        TerminalPrint terminalPrint = new TerminalPrint();
+        public TerminalPrint terminalPrint;
+
+        public MenuUi(TerminalPrint terminalPrint)
+        {
+            this.terminalPrint = terminalPrint;
+        }
         public MainMenu ShowMainMenu()
         {
             Console.Clear();
